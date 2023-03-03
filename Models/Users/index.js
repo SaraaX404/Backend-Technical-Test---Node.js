@@ -23,11 +23,7 @@ UserSchema.pre("save", function(){
 })
 
 UserSchema.methods.checkPassword = function (password){
-    if(bcrypt.compare(this.password,password)){
-        return true
-    }else{
-        return false
-    }
+    return bcrypt.compare(password, this.password)
 }
 
 module.exports = mongoose.model('User', UserSchema)

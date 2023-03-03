@@ -57,7 +57,7 @@ exports.loginUser = async (req,res) =>{
             return res.status(401).send({message:"username cannot be found"})
         }
         //check the password is correct
-        if(user.checkPassword(password)){
+        if(await user.checkPassword(password)){
             //sign a token using role and user id
             const token = jwt.sign({userId:user._id, role:user.role}, process.env.JWT_SECRET, {expiresIn: "10h"}, {} )
             //set toke to a cookie

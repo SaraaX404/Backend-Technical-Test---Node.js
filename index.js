@@ -8,15 +8,15 @@ const userRouter = require('./Routes/UserRoutes')
 const mediRouter = require('./Routes/MediRoutes')
 const customerRouter = require('./Routes/CustomerRoutes')
 const morgan = require('morgan')
-
+const prefix = '/api/v1'
 
 //middlewares
 app.use(morgan('tiny'))
 app.use(express.json())
 app.use(cookieParser())
-app.use('/users', userRouter)
- app.use('/medications',auth, mediRouter)
-app.use('/customers',auth, customerRouter )
+app.use(`${prefix}/users`, userRouter)
+ app.use(`${prefix}/medications`,auth, mediRouter)
+app.use(`${prefix}/customers`,auth, customerRouter )
 //listen
 app.listen(process.env.PORT || 4000, async ()=>{
     try {

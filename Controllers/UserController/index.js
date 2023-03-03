@@ -8,6 +8,11 @@ const jwt = require('jsonwebtoken')
 
 exports.createUser = async (req,res) =>{
 
+
+    if(req.cookies.token){
+        return res.status(401).send({message:"already logged in, please logout and try again"})
+    }
+
     try {
         const user = await UserModel.create(req.body)
         const token = jwt.sign({userId:user._id, role:user.role}, process.env.JWT_SECRET, {expiresIn: "10h"}, {} )
@@ -26,6 +31,11 @@ exports.createUser = async (req,res) =>{
 /*************************/
 
 exports.loginUser = async (req,res) =>{
+
+    if(req.cookies.token){
+        return res.status(401).send({message:"already logged in, please logout and try again"})
+    }
+
     try {
 
         //get username and password from body

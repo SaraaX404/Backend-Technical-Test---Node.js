@@ -3,6 +3,7 @@ require('dotenv').config()
 const cookieParser = require('cookie-parser')
 const app = express()
 const db = require('./Config/DB')
+const auth = require('./Middleware/auth')
 const userRouter = require('./Routes/UserRoutes')
 const mediRouter = require('./Routes/MediRoutes')
 const customerRouter = require('./Routes/CustomerRoutes')
@@ -10,8 +11,8 @@ const customerRouter = require('./Routes/CustomerRoutes')
 app.use(express.json())
 app.use(cookieParser())
 app.use('/users', userRouter)
- app.use('/medications', mediRouter)
-app.use('/customers', customerRouter )
+ app.use('/medications',auth, mediRouter)
+app.use('/customers',auth, customerRouter )
 //listen
 app.listen(process.env.PORT || 4000, async ()=>{
     try {

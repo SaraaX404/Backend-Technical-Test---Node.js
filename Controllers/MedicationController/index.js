@@ -41,7 +41,10 @@ exports.deleteMedi = async(req,res) =>{
 
     try {
 
-        await MediModel.findByIdAndDelete(id)
+        const medi = await MediModel.findByIdAndDelete(id)
+        if(medi === null){
+            return res.status(404).send({message:`there are no medications found belong to this id: ${id}`})
+        }
         res.status(200).send({ message:'successfully deleted permanently'})
 
     }catch (e) {
@@ -60,7 +63,10 @@ exports.softDelete = async(req,res) =>{
 
     try {
 
-        await MediModel.findByIdAndUpdate(id, {deleted:true}, {runValidators:true})
+        const medi = await MediModel.findByIdAndUpdate(id, {deleted:true}, {runValidators:true})
+        if(medi === null){
+            return res.status(404).send({message:`there are no medications found belong to this id: ${id}`})
+        }
         res.status(200).send({ message:'successfully deleted'})
 
     }catch (e) {
@@ -74,12 +80,26 @@ exports.softDelete = async(req,res) =>{
 
 exports.update = async (req,res)=>{
     const id = req.params.id
-    const obj = {
-        name:req.body.name, description:req.body.description, quantity:req.body.quantity
+    const obj = {}
+
+    if(req.body.name){
+        obj.name = req.body.name
     }
+
+    if(req.body.description){
+        obj.description = req.body.description
+    }
+
+    if(req.body.quantity){
+        obj.quantity = req.body.quantity
+    }
+
     try {
 
-       const medi =  MediModel.findByIdAndUpdate(id, obj, {runValidators:true, new:true})
+        const medi = await MediModel.findByIdAndUpdate(id, obj, {runValidators:true, new:true})
+        if(medi === null){
+            return res.status(404).send({message:`there are no medications found belong to this id: ${id}`})
+        }
         res.status(200).send({ message:'successfully updated medication', data:medi})
 
     }catch (e) {

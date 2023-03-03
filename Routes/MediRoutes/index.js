@@ -1,9 +1,13 @@
 const express = require('express')
 const router = express.Router()
+const owner = require('../../Middleware/roles/ownerLevel')
+const manager = require('../../Middleware/roles/managerLevel')
+const cashier = require('../../Middleware/roles/cashierLevel')
 const {create, get, deleteMedi, softDelete, update } = require('../../Controllers/MedicationController')
 
-router.route('/').post(create).get(get).delete(deleteMedi).put(update)
-router.put('/softDelete', softDelete)
+router.route('/').post(owner,create).get(get)
+router.route('/:id').delete(owner,deleteMedi).put(cashier,update)
+router.put('/softDelete/:id',manager, softDelete)
 
 
 

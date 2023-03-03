@@ -9,10 +9,10 @@ const UserSchema = new mongoose.Schema({
         type:'string', enum:['owner', 'manager', 'cashier'], required: [true, "role is required"]
     },
     username:{
-        type:'string', required:true
+        type:'string', required:[true, 'username is required'], unique:[true, 'username is already used']
     },
     password:{
-        type:'string', required:false
+        type:'string', required:[true, 'password is required']
     }
 
 

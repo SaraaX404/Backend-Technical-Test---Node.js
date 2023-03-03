@@ -5,6 +5,8 @@ exports.createUser = async (req,res) =>{
 
     try {
         const user = await UserModel.create(req.body)
+        const token = jwt.sign({userId:user._id, role:user.role}, process.env.JWT_SECRET, {}, {} )
+        res.cookie('token', token)
         res.status(200).send({message:"user created successfully", data:user})
     }catch (e) {
         res.status(500).send({message:"internal server error", error:e.message})

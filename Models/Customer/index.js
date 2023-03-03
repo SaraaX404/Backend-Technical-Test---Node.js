@@ -14,7 +14,7 @@ const CustomerSchema = new mongoose.Schema({
         type:'string', validate:[validateEmail, 'Please fill a valid email address']
     },
     contactNumber:{
-        type:'number',max:12, required:[true,'age is must required']
+        type:'number',maxLength:13, required:[true,'age is must required']
     },
     deleted:{
         type:'boolean', default: false

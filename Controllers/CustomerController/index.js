@@ -41,7 +41,10 @@ exports.deleteCustomer = async(req,res) =>{
 
     try {
 
-        await CustomerModel.findByIdAndDelete(id)
+        const customer = await CustomerModel.findByIdAndDelete(id)
+        if(customer == null){
+            return res.status(404).send({message:`there are no customers fount for this id:${id} `})
+        }
         res.status(200).send({ message:'successfully deleted permanently'})
 
     }catch (e) {
@@ -60,7 +63,10 @@ exports.softDelete = async(req,res) =>{
 
     try {
 
-        await CustomerModel.findByIdAndUpdate(id, {deleted:true}, {runValidators:true})
+        const customer = await CustomerModel.findByIdAndUpdate(id, {deleted:true}, {runValidators:true})
+        if(customer == null){
+            return res.status(404).send({message:`there are no customers fount for this id:${id} `})
+        }
         res.status(200).send({ message:'successfully deleted'})
 
     }catch (e) {
@@ -74,12 +80,33 @@ exports.softDelete = async(req,res) =>{
 
 exports.update = async (req,res)=>{
     const id = req.params.id
-    const obj = {
-        name:req.body.name, age:req.body.age, email:req.body.email, contactNumber:req.body.contactNumber
+    const obj = {}
+
+    if(req.body.name){
+        obj.name = req.body.name
     }
+
+    if(req.body.age){
+        obj.age = req.body.age
+    }
+
+    if(req.body.email){
+        obj.email = req.body.email
+    }
+
+    if(req.body.contactNumber){
+        obj.contactNumber = req.body.contactNumber
+    }
+
+
     try {
 
-        const customer =  CustomerModel.findByIdAndUpdate(id, obj, {runValidators:true, new:true})
+        const customer = await CustomerModel.findByIdAndUpdate(id, obj, {runValidators:true, new:true})
+
+        if(customer == null){
+            return res.status(404).send({message:`there are no customers fount for this id:${id} `})
+        }
+
         res.status(200).send({ message:'successfully updated customer', data:customer})
 
     }catch (e) {

@@ -1,5 +1,9 @@
 const MediModel = require('../../Models/Medications')
 
+
+/*************************/
+/**** create medication ****/
+/*************************/
 exports.create = async(req,res) =>{
 
     try {
@@ -16,7 +20,9 @@ exports.create = async(req,res) =>{
 
 }
 
-
+/*************************/
+/**** get medication ****/
+/*************************/
 
 exports.get = async(req,res) =>{
 
@@ -33,6 +39,36 @@ exports.get = async(req,res) =>{
 
 
 }
+
+/*************************/
+/**** get medication by id ****/
+/*************************/
+
+exports.getById = async(req,res) =>{
+
+
+    const id = req.params.id
+
+    try {
+
+        const medi = await MediModel.findOne({_id:id,deleted:false})
+        if(medi == null){
+            return res.status(404).send({message:`there are no medication belongs to this id:${id}`})
+        }
+        res.status(200).send({ data:medi})
+
+    }catch (e) {
+
+        res.status(500).send({message:'internal server error', error:e.message})
+
+    }
+
+
+}
+
+/*************************/
+/**** delete medication ****/
+/*************************/
 
 exports.deleteMedi = async(req,res) =>{
 
@@ -56,6 +92,10 @@ exports.deleteMedi = async(req,res) =>{
 
 }
 
+/*************************/
+/**** soft delete medication ****/
+/*************************/
+
 exports.softDelete = async(req,res) =>{
 
 
@@ -77,6 +117,10 @@ exports.softDelete = async(req,res) =>{
 
 
 }
+
+/*************************/
+/**** update medication ****/
+/*************************/
 
 exports.update = async (req,res)=>{
     const id = req.params.id

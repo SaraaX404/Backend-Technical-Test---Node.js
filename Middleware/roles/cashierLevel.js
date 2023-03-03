@@ -1,3 +1,6 @@
+/* owners, managers and cashiers can continue through this middleware*/
+
+
 module.exports = (req,res,next) =>{
 
 

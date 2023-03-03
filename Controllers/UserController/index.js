@@ -1,11 +1,16 @@
 const UserModel = require('../../Models/Users')
 const jwt = require('jsonwebtoken')
 
+/*************************/
+/**** register user ****/
+/*************************/
+
+
 exports.createUser = async (req,res) =>{
 
     try {
         const user = await UserModel.create(req.body)
-        const token = jwt.sign({userId:user._id, role:user.role}, process.env.JWT_SECRET, {}, {} )
+        const token = jwt.sign({userId:user._id, role:user.role}, process.env.JWT_SECRET, {expiresIn: "10h"}, {} )
         res.cookie('token', token)
         res.status(200).send({message:"user created successfully", data:user})
     }catch (e) {
@@ -15,6 +20,10 @@ exports.createUser = async (req,res) =>{
 
 
 }
+
+/*************************/
+/**** login user ****/
+/*************************/
 
 exports.loginUser = async (req,res) =>{
     try {
@@ -40,7 +49,7 @@ exports.loginUser = async (req,res) =>{
         //check the password is correct
         if(user.checkPassword(password)){
             //sign a token using role and user id
-            const token = jwt.sign({userId:user._id, role:user.role}, process.env.JWT_SECRET, {}, {} )
+            const token = jwt.sign({userId:user._id, role:user.role}, process.env.JWT_SECRET, {expiresIn: "10h"}, {} )
             //set toke to a cookie
             res.cookie('token', token)
             res.status(200).send({message:"logged in success"})
@@ -50,4 +59,21 @@ exports.loginUser = async (req,res) =>{
     }catch (e){
         res.status(500).send({message:"internal server error", error:e.message})
     }
+}
+
+/*************************/
+/**** logout user ****/
+/*************************/
+
+exports.logout = (req,res)=>{
+
+    if(!req.cookies.token){
+        return res.status(401).send({message:'you are not logged in'})
+    }
+
+    res.clearCookie('token')
+
+    res.status(200).send({message:"successfully logged out"})
+
+
 }

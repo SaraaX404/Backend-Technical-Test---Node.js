@@ -7,7 +7,11 @@ const auth = require('./Middleware/auth')
 const userRouter = require('./Routes/UserRoutes')
 const mediRouter = require('./Routes/MediRoutes')
 const customerRouter = require('./Routes/CustomerRoutes')
+const morgan = require('morgan')
+
+
 //middlewares
+app.use(morgan('tiny'))
 app.use(express.json())
 app.use(cookieParser())
 app.use('/users', userRouter)

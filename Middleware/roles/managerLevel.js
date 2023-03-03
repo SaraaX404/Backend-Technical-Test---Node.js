@@ -1,3 +1,6 @@
+/*only owners and managers can continue through this middleware*/
+
+
 module.exports = (req,res,next) =>{
 
     if(req.user.role == 'owner'){

@@ -1,5 +1,8 @@
 const CustomerModel = require('../../Models/Customer')
 
+/*************************/
+/**** create customer ****/
+/*************************/
 exports.create = async(req,res) =>{
 
     try {
@@ -17,7 +20,9 @@ exports.create = async(req,res) =>{
 }
 
 
-
+/*************************/
+/**** get customers ****/
+/*************************/
 exports.get = async(req,res) =>{
 
     try {
@@ -33,6 +38,39 @@ exports.get = async(req,res) =>{
 
 
 }
+
+/*************************/
+/**** get customers by id ****/
+/*************************/
+
+exports.getById = async(req,res) =>{
+
+    const id = req.params.id
+
+    try {
+
+        const customer = await CustomerModel.findOne({_id:id, deleted:false})
+
+        if(customer == null){
+           return res.status(404).send({message:`there are no customer belongs to this id:${id}`})
+        }
+
+        res.status(200).send({ data:customer})
+
+    }catch (e) {
+
+        res.status(500).send({message:'internal server error', error:e.message})
+
+    }
+
+
+}
+
+/*************************/
+/**** delete customer ****/
+/*************************/
+
+
 
 exports.deleteCustomer = async(req,res) =>{
 
@@ -56,6 +94,10 @@ exports.deleteCustomer = async(req,res) =>{
 
 }
 
+/*************************/
+/**** soft delete customer ****/
+/*************************/
+
 exports.softDelete = async(req,res) =>{
 
 
@@ -77,6 +119,10 @@ exports.softDelete = async(req,res) =>{
 
 
 }
+
+/*************************/
+/**** update customer ****/
+/*************************/
 
 exports.update = async (req,res)=>{
     const id = req.params.id
